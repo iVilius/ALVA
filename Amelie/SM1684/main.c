@@ -31,7 +31,7 @@ int main( void) {
 // 		set_bit(PORTE, PE2);
 // 		if(!test_bit(PINE, PE2))
 // 			toggle_LED0();
-		//button_reed();
+		button_reed();
 		button_heddles();
 		button_garage_cw();
 		button_garage_ccw();

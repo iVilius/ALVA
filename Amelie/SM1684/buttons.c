@@ -60,7 +60,7 @@ void button_reed( void) {
 		motor_reed_step();
 		reed_old = reed_new;
 	}
-	//reed_old = heddles_new;
+	reed_old = reed_new;
 }
 
 BOOL garage_old_cw = FALSE;
