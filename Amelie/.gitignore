@@ -33,6 +33,7 @@
 *.su
 
 # User defined files
+.vs/SM1684/v14
 Debug
 *.xml
 *.cproj
