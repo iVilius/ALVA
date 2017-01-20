@@ -17,8 +17,11 @@
 
 void init_motors( void);
 void motor_heddles_step( void);
+void motor_rapier_step( void);
 void motor_reed_step( void);
-void motor_garage_cw( void);
-void motor_garage_ccw( void);
+void motor_garage_primary_cw( void);
+void motor_garage_primary_ccw( void);
+void motor_garage_secondary_cw( void);
+void motor_garage_secondary_ccw( void);
 
 #endif /* MOTOR_H_ */

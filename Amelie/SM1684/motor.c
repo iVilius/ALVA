@@ -8,11 +8,14 @@
 #include "motor.h"
 
 int dist_heddles = 0;
-int dist_garage = 0;
+int dist_garage_primary = 0;
+int dist_garage_secondary = 0;
+int dist_rapier = 0;
 int dist_reed = 0;
 
 // Speed constants. The lower the constant - the faster the rotation
 const int speed_garage = 4;
+const int speed_rapier = 20;
 const int speed_reed = 15;
 const int speed_heddles = 3;
 
@@ -32,44 +35,95 @@ void init_motors( void) {
 	set_bit(PORTD, PD4);		// PIN 15 EXT 2
 	
 	/*------Set output--------*/
-	set_bit(DDRD, DDD5);		// STEP GARAGE
-	set_bit(DDRE, DDE5);		// DIR  GARAGE
-	set_bit(DDRF, DDF3);		// SECONDARY GARAGE DIRECTION INVERTER
+	set_bit(DDRD, DDD5);		// STEP PRIMARY GARAGE
+	set_bit(DDRE, DDE5);		// DIR PRIMARY GARAGE
 	/*-------Set to 0---------*/
 	set_bit(PORTD, PD5);		// PIN 10
 	set_bit(PORTE, PE5);		// PIN 9
-	/*-------Set to 1---------*/
-	clear_bit(PORTF, PF3);		// PIN 3 EXT 3
+	
+	/*------Set output--------*/
+	set_bit(DDRF, DDF3);		// STEP SECONDARY GARAGE 
+	set_bit(DDRG, DDG5);		// DIR SECONDARY GARAGE
+	/*-------Set to 0---------*/
+	set_bit(PORTF, PF3);		// PIN 3 EXT 3
+	set_bit(PORTG, PG5);		// PIN 4 EXT 4
+	
+	/*------Set output--------*/
+	set_bit(DDRB, DDB7);		// STEP RAPIER
+	set_bit(DDRE, DDE7);		// DIR RAPIER
+	/*-------Set to 0---------*/
+	set_bit(PORTB, PB7);		// PIN 5 EXT 3
+	set_bit(PORTE, PE7);		// PIN 9 EXT 3
 }
 
-void motor_garage_step( void) {
+void motor_garage_primary_step( void) {
 	while (1) {
 		set_bit(PORTD, PD5);
 		_delay_us(speed_garage);
 		clear_bit(PORTD, PD5);
 		_delay_us(speed_garage);
-		dist_garage = dist_garage +1;
+		dist_garage_primary = dist_garage_primary +1;
 		//6400 is 15 degrees for 51200 steps per rev with 1:3 ratio
 		//51200 steps causes overflow and instability.
 		//In order to revolute fully, use fewer-step config.
-		if(dist_garage>6400/*6400*/) { 
+		if(dist_garage_primary>6400) { 
 			clear_bit(PORTD, PD5);
-			dist_garage = 0;
+			dist_garage_primary = 0;
 			return;
 		}
 	}
 }
 
-void motor_garage_cw( void) {
-	set_bit(PORTE, PE5);		// clockwise direction
-	clear_bit(PORTF, PF3);
-	motor_garage_step();
+void motor_garage_secondary_step( void) {
+	while (1) {
+		set_bit(PORTF, PF3);
+		_delay_us(speed_garage);
+		clear_bit(PORTF, PF3);
+		_delay_us(speed_garage);
+		dist_garage_secondary = dist_garage_secondary +1;
+		if(dist_garage_secondary>6400) {
+			clear_bit(PORTF, PF3);
+			dist_garage_secondary = 0;
+			return;
+		}
+	}
 }
 
-void motor_garage_ccw( void) {
+void motor_garage_primary_cw( void) {
+	set_bit(PORTE, PE5);		// clockwise direction
+	motor_garage_primary_step();
+}
+
+void motor_garage_primary_ccw( void) {
 	clear_bit(PORTE, PE5);		// counter-clockwise direction
-	set_bit(PORTF, PF3);
-	motor_garage_step();
+	motor_garage_primary_step();
+}
+
+void motor_garage_secondary_cw( void) {
+	clear_bit(PORTG, PG5);		// clockwise direction
+	motor_garage_secondary_step();
+}
+
+void motor_garage_secondary_ccw( void) {
+	set_bit(PORTG, PG5);		// counter-clockwise direction
+	motor_garage_secondary_step();
+}
+
+
+void motor_rapier_step( void) {
+	while(1) {
+		set_bit(PORTB, PB7);
+		_delay_us(speed_rapier);
+		clear_bit(PORTB, PB7);
+		_delay_us(speed_rapier);
+		dist_rapier = dist_rapier+1;
+		if(dist_rapier>1000) { // ADJUST THIS ONE
+			clear_bit(PORTB, PB7);
+			dist_rapier = 0;
+			break;
+		}
+	}
+	toggle_bit(PORTE, PE7);
 }
 
 void motor_reed_step( void) {

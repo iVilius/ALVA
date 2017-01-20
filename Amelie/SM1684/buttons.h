@@ -17,12 +17,11 @@
 
 void init_buttons( void);
 void button_heddles( void);
+void button_rapier( void);
 void button_reed( void);
-void button_garage_cw( void);
-void button_garage_ccw( void);
-void button1( void);
-void button2( void);
-void button3( void);
-
+void button_garage_primary_cw( void);
+void button_garage_primary_ccw( void);
+void button_garage_secondary_cw( void);
+void button_garage_secondary_ccw( void);
 
 #endif /* BUTTONS_H_ */

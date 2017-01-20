@@ -7,35 +7,23 @@
 
 #include "buttons.h"
 
-int old24 = 0;
-int new24 = 0;
-
-int old180 = 0;
-int new180 = 0;
-
-int old_dir = 0;
-int new_dir = 0;
-
 void init_buttons( void) {
 	
 	/*------Set input---------*/
 	clear_bit(DDRE, DDE3);		// Heddles button
 	clear_bit(DDRG, DDG0);		// Reed button
-	clear_bit(DDRE, DDE6);		// Garage cw button
-	clear_bit(DDRD, DDD6);		// Garage ccw button
+	clear_bit(DDRE, DDE6);		// Garage primary cw button
+	clear_bit(DDRD, DDD6);		// Garage primary ccw button
+	clear_bit(DDRG, DDG2);		// Garage secondary cw button
+	//clear_bit();				// Garage secondary ccw button
+	clear_bit(DDRD, DDD7);		// Rapier button
 	/*-------Set to 1---------*/
 	set_bit(PORTE, PE3);		// PIN 6
 	set_bit(PORTG, PG0);		// PIN 15
 	set_bit(PORTE, PE6);		// PIN 9 EXT 2
 	set_bit(PORTD, PD6);		// PIN 10 EXT 2
-// 	/*------Set input--------*/
-// 	set_bit(DDRE, DDE7);		// button 1
-// 	set_bit(DDRF, DDF3);		// button 2
-// 	set_bit(DDRG, DDG5);		// button 3
-// 	/*-------Set to 1---------*/
-// 	set_bit(PINE, PE7);
-// 	set_bit(PINF, PF3);
-// 	set_bit(PING, PG5);
+	set_bit(PORTG, PG2);		// PIN 15 EXT 3
+	set_bit(PORTD, PD7);		// PIN 10 EXT 3
 }
 
 BOOL heddles_old = FALSE;
@@ -63,60 +51,61 @@ void button_reed( void) {
 	reed_old = reed_new;
 }
 
-BOOL garage_old_cw = FALSE;
-BOOL garage_new_cw = FALSE;
+BOOL rapier_old = FALSE;
+BOOL rapier_new = FALSE;
 
-void button_garage_cw( void) {
-	garage_new_cw = !test_bit(PINE, PE6);
-	if(garage_new_cw == TRUE && garage_old_cw == FALSE) {
-		motor_garage_cw();
-		garage_old_cw = TRUE;
+void button_rapier( void) {
+	rapier_new = !test_bit(PIND, PD7);
+	if(rapier_new != rapier_old) {
+		motor_rapier_step();
 	}
-	garage_old_cw = garage_new_cw;
+	rapier_old = rapier_new;
 }
 
-BOOL garage_old_ccw = FALSE;
-BOOL garage_new_ccw = FALSE;
+BOOL garage_primary_old_cw = FALSE;
+BOOL garage_primary_new_cw = FALSE;
 
-void button_garage_ccw( void) {
-	garage_new_ccw = !test_bit(PIND, PD6);
-	if(garage_new_ccw == TRUE && garage_old_ccw == FALSE) {
-		motor_garage_ccw();
-		garage_old_ccw = TRUE;
+void button_garage_primary_cw( void) {
+	garage_primary_new_cw = !test_bit(PINE, PE6);
+	if(garage_primary_new_cw == TRUE && garage_primary_old_cw == FALSE) {
+		motor_garage_primary_cw();
+		garage_primary_old_cw = TRUE;
 	}
-	garage_old_ccw = garage_new_ccw;
+	garage_primary_old_cw = garage_primary_new_cw;
 }
 
-/*
-void button1( void) {
-	// rising edge detector
-	new24 = !test_bit(PINE, PE7);
-	if (new24 == 1 && old24 == 0) {
-		old24 = 1;
-	} else {
-		old24 = new24;
+BOOL garage_primary_old_ccw = FALSE;
+BOOL garage_primary_new_ccw = FALSE;
+
+void button_garage_primary_ccw( void) {
+	garage_primary_new_ccw = !test_bit(PIND, PD6);
+	if(garage_primary_new_ccw == TRUE && garage_primary_old_ccw == FALSE) {
+		motor_garage_primary_ccw();
+		garage_primary_old_ccw = TRUE;
 	}
+	garage_primary_old_ccw = garage_primary_new_ccw;
 }
 
-void button2( void) {
-	// rising edge detector
-	new180 = !test_bit(PINF, PF3);
-	if (new180 == 1 && old180 == 0) {
-		old180 = 1;
-		
-	} else {
-		old180 = new180;
+BOOL garage_secondary_old_cw = FALSE;
+BOOL garage_secondary_new_cw = FALSE;
+
+void button_garage_secondary_cw( void) {
+	garage_secondary_new_cw = !test_bit(PING, PG2);
+	if(garage_secondary_new_cw == TRUE && garage_secondary_old_cw == FALSE) {
+		motor_garage_secondary_cw();
+		garage_secondary_old_cw = TRUE;
 	}
+	garage_secondary_old_cw = garage_secondary_new_cw;
 }
 
-void button3( void) {
-	// rising edge detector
-	new_dir = !test_bit(PING, PG5);
-	if (new_dir == 1 && old_dir == 0) {
-		old_dir = 1;
-		toggle_bit(PORTE, PE2); //Switch direction
-		toggle_LED0();
-	} else {
-		old_dir = new_dir;
+BOOL garage_secondary_old_ccw = FALSE;
+BOOL garage_secondary_new_ccw = FALSE;
+
+void button_garage_secondary_ccw( void) {
+	garage_secondary_new_ccw = !test_bit(PING, PG2); // FIND REAL BUTTON
+	if(garage_secondary_new_ccw == TRUE && garage_secondary_old_ccw == FALSE) {
+		motor_garage_secondary_ccw();
+		garage_secondary_old_ccw = TRUE;
 	}
-}*/
+	garage_secondary_old_ccw = garage_secondary_new_ccw;
+}
