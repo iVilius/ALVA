@@ -15,7 +15,7 @@ int dist_reed = 0;
 
 // Speed constants. The lower the constant - the faster the rotation
 const int speed_garage = 4;
-const int speed_rapier = 20;
+const int speed_rapier = 6;
 const int speed_reed = 15;
 const int speed_heddles = 3;
 
@@ -141,6 +141,65 @@ void motor_reed_step( void) {
 	}
 	toggle_bit(PORTD, PD4);			// switch direction
 }
+
+void motor_rapier_step_ccw_cw( void) {
+	clear_bit(PORTD, PD4);
+	while(1) {
+		set_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		clear_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		dist_reed = dist_reed +1;
+		if(dist_reed>6700) {		// 12800 steps is 360 degrees
+			clear_bit(PORTB, PB6);
+			dist_reed = 0;
+			break;
+		}
+	}
+	set_bit(PORTD, PD4);			// switch direction
+	while(1) {
+		set_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		clear_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		dist_reed = dist_reed +1;
+		if(dist_reed>6700) {		// 12800 steps is 360 degrees
+			clear_bit(PORTB, PB6);
+			dist_reed = 0;
+			break;
+		}
+	}
+}
+
+void motor_rapier_step_cw_ccw( void) {
+	set_bit(PORTD, PD4);
+	while(1) {
+		set_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		clear_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		dist_reed = dist_reed +1;
+		if(dist_reed>6900) {		// 12800 steps is 360 degrees
+			clear_bit(PORTB, PB6);
+			dist_reed = 0;
+			break;
+		}
+	}
+	clear_bit(PORTD, PD4);			// switch direction
+	while(1) {
+		set_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		clear_bit(PORTB, PB6);
+		_delay_us(speed_rapier);
+		dist_reed = dist_reed +1;
+		if(dist_reed>6900) {		// 12800 steps is 360 degrees
+			clear_bit(PORTB, PB6);
+			dist_reed = 0;
+			break;
+		}
+	}
+}
+
 
 void motor_heddles_step( void) {
 	toggle_LED0();

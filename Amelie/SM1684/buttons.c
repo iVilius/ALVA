@@ -55,11 +55,14 @@ BOOL rapier_old = FALSE;
 BOOL rapier_new = FALSE;
 
 void button_rapier( void) {
-	rapier_new = !test_bit(PIND, PD7);
-	if(rapier_new != rapier_old) {
-		motor_rapier_step();
+	rapier_new = !test_bit(PING, PG0); // THIS IS THE REED BUTTON
+	if(rapier_new == TRUE && rapier_old == FALSE) {
+		motor_rapier_step_cw_ccw();
+		rapier_old = rapier_new;
+	} else if (rapier_new == FALSE && rapier_old == TRUE) {
+		motor_rapier_step_ccw_cw();
+		rapier_old = rapier_new;
 	}
-	rapier_old = rapier_new;
 }
 
 BOOL garage_primary_old_cw = FALSE;
