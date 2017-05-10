@@ -12,8 +12,12 @@
 #include "definitions.h"
 #include <avr/io.h>
 #include <stdio.h>
+#include <util/delay.h>
 
-void toggle_LED0( void);
+void toggle_LED0_3_times( void);
+void toggle_LED0_1s( void);
+void toggle_LED0_100ms( void);
+void toggle_LED0_10ms( void);
 void LED0( int on);
 void LED1( int on);
 void LED2( int on);

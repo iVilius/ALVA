@@ -12,6 +12,6 @@
 #include <avr/interrupt.h>
 #include "definitions.h"
 
-void timer0_init( void);
+void init_timer0( void);
 
 #endif /* TIMER0_H_ */

@@ -10,7 +10,7 @@
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
-#define F_CPU 16000000
+#define F_CPU 1000000		//16 MHz, with 1:2 prescaler and CKDIV8 programmed = 1 MHz
 
 #include <stdio.h>
 
@@ -19,6 +19,15 @@ typedef char BOOL;
 #define true 1
 #define FALSE 0
 #define false 0
+
+// button struct definition
+typedef struct {
+	uint8_t *ddrX;	//data direction
+	uint8_t ddXX;	//data block
+	uint8_t *portX; //port
+	uint8_t *pinX;	//pin
+	uint8_t pXX;	//number
+} button;
 
 //sets bit "bit" in register "reg"
 #define set_bit(reg, bit)		(reg |= (1<<bit))

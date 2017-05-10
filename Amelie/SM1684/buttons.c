@@ -11,21 +11,82 @@ void init_buttons( void) {
 	
 	/*------Set input---------*/
 	clear_bit(DDRE, DDE3);		// Heddles button
-	clear_bit(DDRG, DDG0);		// Reed button
-	clear_bit(DDRE, DDE6);		// Garage primary cw button
-	clear_bit(DDRD, DDD6);		// Garage primary ccw button
-	clear_bit(DDRG, DDG2);		// Garage secondary cw button
-	//clear_bit();				// Garage secondary ccw button
-	clear_bit(DDRD, DDD7);		// Rapier button
+	clear_bit(DDRG, DDG0);		// END LIMIT SWITCH 1
+	clear_bit(DDRE, DDE6);		// Winding cw button
+	clear_bit(DDRD, DDD6);		// Winding ccw button
+	clear_bit(DDRD, DDD7);		// END LIMIT SWITCH 2
 	/*-------Set to 1---------*/
 	set_bit(PORTE, PE3);		// PIN 6
 	set_bit(PORTG, PG0);		// PIN 15
 	set_bit(PORTE, PE6);		// PIN 9 EXT 2
 	set_bit(PORTD, PD6);		// PIN 10 EXT 2
-	set_bit(PORTG, PG2);		// PIN 15 EXT 3
 	set_bit(PORTD, PD7);		// PIN 10 EXT 3
 }
 
+button BUTTON_HEDDLES = {
+	&DDRE,
+	DDE3,
+	&PORTE,
+	&PINE,
+	PE3
+};
+
+button BUTTON_END_LIMIT_1 = {
+	&DDRG,
+	DDG0,
+	&PORTG,
+	&PING,
+	PG0
+};
+
+button BUTTON_END_LIMIT_2 = {
+	&DDRD,
+	DDD7,
+	&PORTD,
+	&PIND,
+	PD7
+};
+
+button BUTTON_WINDING_CW = {
+	&DDRE,
+	DDE6,
+	&PORTE,
+	&PINE,
+	PE6
+};
+
+button BUTTON_WINDING_CCW = {
+	&DDRD,
+	DDD6,
+	&PORTD,
+	&PIND,
+	PD6
+};
+
+int get_button_state(button BUTTON) {
+	if(!test_bit(*BUTTON.pinX, BUTTON.pXX)) return 1;
+	return 0;
+}
+
+int falling_edge_detector(int *state_new, int *state_old, button BUTTON) {
+	state_new = !test_bit(*BUTTON.pinX, BUTTON.pXX);
+	if(state_new == FALSE && state_old == TRUE) {
+		return 1;
+		state_old = TRUE;
+	}
+	state_old = state_new;
+}
+
+int rising_edge_detector(int *state_new, int *state_old, button BUTTON) {
+	state_new = !test_bit(*BUTTON.pinX, BUTTON.pXX);
+	if(state_new == TRUE && state_old == FALSE) {
+		return 1;
+		state_old = TRUE;
+	}
+	state_old = state_new;
+}
+
+//------------BUTTON-SPECIFIC FUNCTIONS-----------//
 BOOL heddles_old = FALSE;
 BOOL heddles_new = FALSE;
 
@@ -34,7 +95,6 @@ void button_heddles( void) {
 	if(heddles_new == TRUE && heddles_old == FALSE) {
 		motor_heddles_step();
 		heddles_old = TRUE;
-		//toggle_bit(PORTE, PE2);
 	}
 	heddles_old = heddles_new;
 }
@@ -55,7 +115,7 @@ BOOL rapier_old = FALSE;
 BOOL rapier_new = FALSE;
 
 void button_rapier( void) {
-	rapier_new = !test_bit(PING, PG0); // THIS IS THE REED BUTTON
+	rapier_new = !test_bit(PIND, PD7);
 	if(rapier_new == TRUE && rapier_old == FALSE) {
 		motor_rapier_step_cw_ccw();
 		rapier_old = rapier_new;
@@ -87,28 +147,4 @@ void button_garage_primary_ccw( void) {
 		garage_primary_old_ccw = TRUE;
 	}
 	garage_primary_old_ccw = garage_primary_new_ccw;
-}
-
-BOOL garage_secondary_old_cw = FALSE;
-BOOL garage_secondary_new_cw = FALSE;
-
-void button_garage_secondary_cw( void) {
-	garage_secondary_new_cw = !test_bit(PING, PG2);
-	if(garage_secondary_new_cw == TRUE && garage_secondary_old_cw == FALSE) {
-		motor_garage_secondary_cw();
-		garage_secondary_old_cw = TRUE;
-	}
-	garage_secondary_old_cw = garage_secondary_new_cw;
-}
-
-BOOL garage_secondary_old_ccw = FALSE;
-BOOL garage_secondary_new_ccw = FALSE;
-
-void button_garage_secondary_ccw( void) {
-	garage_secondary_new_ccw = !test_bit(PING, PG2); // FIND REAL BUTTON
-	if(garage_secondary_new_ccw == TRUE && garage_secondary_old_ccw == FALSE) {
-		motor_garage_secondary_ccw();
-		garage_secondary_old_ccw = TRUE;
-	}
-	garage_secondary_old_ccw = garage_secondary_new_ccw;
 }

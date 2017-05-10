@@ -28,6 +28,35 @@ void LED0( int on) {
 	set_bit(PORTB, PB4);
 }
 
-void toggle_LED0( void) {
+void toggle_LED0_1s( void) {
+	_delay_ms(1000);
+	toggle_bit(PORTB, PB4);
+}
+
+void toggle_LED0_100ms( void) {
+	_delay_ms(100);
  	toggle_bit(PORTB, PB4);
+}
+
+void toggle_LED0_10ms( void) {
+	_delay_ms(10);
+	toggle_bit(PORTB, PB4);
+}
+
+void toggle_LED0_3_times( void) {
+	clear_bit(PORTB, PB4);		//ON
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//OFF
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//ON
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//OFF
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//ON
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//OFF
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//ON
+	_delay_ms(50);
+	toggle_bit(PORTB, PB4);		//OFF
 }
