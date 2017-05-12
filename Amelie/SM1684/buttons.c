@@ -71,19 +71,21 @@ int get_button_state(button BUTTON) {
 int falling_edge_detector(int *state_new, int *state_old, button BUTTON) {
 	state_new = !test_bit(*BUTTON.pinX, BUTTON.pXX);
 	if(state_new == FALSE && state_old == TRUE) {
+		state_old = state_new;
 		return 1;
-		state_old = TRUE;
 	}
 	state_old = state_new;
+	return 0;
 }
 
 int rising_edge_detector(int *state_new, int *state_old, button BUTTON) {
 	state_new = !test_bit(*BUTTON.pinX, BUTTON.pXX);
 	if(state_new == TRUE && state_old == FALSE) {
+		state_old = state_new;
 		return 1;
-		state_old = TRUE;
 	}
 	state_old = state_new;
+	return 0;
 }
 
 //------------BUTTON-SPECIFIC FUNCTIONS-----------//

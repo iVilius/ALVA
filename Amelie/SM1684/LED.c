@@ -8,7 +8,7 @@
 #include "LED.h"
 
 void init_LED( void) {
-	/*------Set input--------*/
+	/*------Set output--------*/
 	set_bit(DDRB, DDB4);		// LED 0
 // 	set_bit(DDRB, DDB5);		// LED 1
 // 	set_bit(DDRB, DDB6);		// LED 2

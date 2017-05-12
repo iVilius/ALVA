@@ -10,7 +10,7 @@
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
-#define F_CPU 1000000		//16 MHz, with 1:2 prescaler and CKDIV8 programmed = 1 MHz
+#define F_CPU 8000000		//16 MHz, with 1:2 prescaler and CKDIV8 programmed = 1 MHz
 
 #include <stdio.h>
 

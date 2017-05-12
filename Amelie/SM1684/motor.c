@@ -17,21 +17,20 @@ int dist_reed = 0;
 const int speed_garage = 4;
 const int speed_rapier = 6;
 const int speed_reed = 150;
-const int speed_heddles = 150;
 
 void init_motors( void) {
 	/*------Set output--------*/
 	set_bit(DDRB, DDB5);		// STEP HEDDLES
 	set_bit(DDRE, DDE2);		// DIR  HEDDLES
-	/*-------Set to 0---------*/
+	set_bit(DDRB, DDB6);		// !EN HEDDLES
+	/*-------Set to 1---------*/
 	set_bit(PORTB, PB5);		// PIN 7
 	set_bit(PORTE, PE2);		// PIN 5
+	set_bit(PORTB, PB6);		// PIN 8
 	
 	/*------Set output--------*/
-	set_bit(DDRB, DDB6);		// STEP REED
 	set_bit(DDRD, DDD4);		// DIR  REED
 	/*-------Set to 0---------*/
-	set_bit(PORTB, PB6);		// PIN 8
 	set_bit(PORTD, PD4);		// PIN 15 EXT 2
 	
 	/*------Set output--------*/
@@ -154,19 +153,17 @@ void motor_rapier_step_cw_ccw( void) {
 
 void motor_heddles_up( void) {
 	set_bit(PORTE, PE2);			// motor direction UP
-	set_bit(TIMSK0, TOIE0);			// Enable timer0
+	clear_bit(PORTB, PB6);			// Enable motor, set !EN low
 	//Timer ISR takes care of running the motor itself
 }
 
 void motor_heddles_stop( void) {
-	clear_bit(TIMSK0, TOIE0);		// Disable timer0
-	clear_bit(PORTB, PB5);			// Disable motor
-	set_bit(PORTB, PB4);			// Disable the Led
+	set_bit(PORTB, PB6);			//disable motor, set !EN high
 }
 
 void motor_heddles_down( void) {
 	clear_bit(PORTE, PE2);			// motor direction DOWN
-	set_bit(TIMSK0, TOIE0);			// Enable timer0
+	clear_bit(PORTB, PB6);			// Enable motor, set !EN low
 	//Timer ISR takes care of running the motor itself
 }
 
@@ -182,10 +179,10 @@ void motor_heddles_step( void) {
 	} else
 		set_bit(PORTE, PE2); //set direction
 	while(1) {
-		set_bit(PORTB, PB5);
-		_delay_us(speed_heddles);
-		clear_bit(PORTB, PB5);
-		_delay_us(speed_heddles);
+// 		set_bit(PORTB, PB5);
+// 		_delay_us(speed_heddles);
+// 		clear_bit(PORTB, PB5);
+// 		_delay_us(speed_heddles);
 
 		if(state == 1) {
 			if(get_button_state(BUTTON_END_LIMIT_2)) {

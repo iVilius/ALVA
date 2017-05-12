@@ -10,16 +10,18 @@
 
 #include "timer0.h"
 
-/* Init variables */
+
 /* Speed control										*/
 /* Lowest possible delay between PVM pulses are ~10us.	*/
 /* speed 1 == 1 MHz / 256 == 256us.						*/
 /* speed 2 == 1 MHz / 256 * 2 == 512us					*/
 /* etc.													*/
-int speed = 1;
-int counter = 0;
+int speed_heddles = 10;
+int counter_heddles = 0;
+int speed_winding = 10;
+int counter_winding = 0;
 
-
+/* Init variables */
 void init_timer0( void) {
 	/* Clear global interrupts */
 	cli();
@@ -36,20 +38,26 @@ void init_timer0( void) {
 	clear_bit(TCCR0B, CS01);
 	clear_bit(TCCR0B, CS02);
 	/* Enable timer overflow */
-	//set_bit(TIMSK0, TOIE0);			//
+	set_bit(TIMSK0, TOIE0);			//
 	/* Enable global interrupts */
 	sei();
 }
 
 ISR(TIMER0_OVF_vect) {
 	/* Increment counter */
-	counter++;
-	if(counter == speed){
+	counter_heddles;
+	if(counter_heddles == speed_heddles){
 		/* Reset the counter */
-		counter = 0;
+		counter_heddles = 0;
 		/* PWM to motor */
+		//toggle_bit(PORTB, PB4);
 		toggle_bit(PORTB, PB5);
-		/* LED control light */
-		toggle_bit(PORTB, PB4);
+	}
+	if(counter_winding == speed_winding) {
+		/* Reset the counter */
+		counter_winding = 0;
+		/* PWM to motor */
+		//toggle_bit(PORTB, PB4);
+		toggle_bit(PORTB, PB5);
 	}
 }
