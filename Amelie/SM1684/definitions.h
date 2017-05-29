@@ -27,6 +27,7 @@ typedef struct {
 	uint8_t *portX; //port
 	uint8_t *pinX;	//pin
 	uint8_t pXX;	//number
+	char name[];	
 } button;
 
 //sets bit "bit" in register "reg"

@@ -28,7 +28,8 @@ button BUTTON_HEDDLES = {
 	DDE3,
 	&PORTE,
 	&PINE,
-	PE3
+	PE3,
+	"heddles"
 };
 
 button BUTTON_END_LIMIT_1 = {
@@ -36,7 +37,8 @@ button BUTTON_END_LIMIT_1 = {
 	DDG0,
 	&PORTG,
 	&PING,
-	PG0
+	PG0,
+	"end limit switch 1"
 };
 
 button BUTTON_END_LIMIT_2 = {
@@ -44,7 +46,8 @@ button BUTTON_END_LIMIT_2 = {
 	DDD7,
 	&PORTD,
 	&PIND,
-	PD7
+	PD7,
+	"end limit switch 2"
 };
 
 button BUTTON_WINDING_CW = {
@@ -52,7 +55,8 @@ button BUTTON_WINDING_CW = {
 	DDE6,
 	&PORTE,
 	&PINE,
-	PE6
+	PE6,
+	"winding cw"
 };
 
 button BUTTON_WINDING_CCW = {
@@ -60,7 +64,8 @@ button BUTTON_WINDING_CCW = {
 	DDD6,
 	&PORTD,
 	&PIND,
-	PD6
+	PD6,
+	"winding ccw"
 };
 
 int get_button_state(button BUTTON) {

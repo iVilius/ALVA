@@ -10,6 +10,8 @@
 
 #include "timer1.h"
 
+int counter;
+
 void init_timer1( void) {
 	/* Clear global interrupts */
 	cli();
@@ -23,17 +25,30 @@ void init_timer1( void) {
 	0x06-0x07	external clk sources
 	*/
 	set_bit(TCCR1B, CS00);
-	clear_bit(TCCR1B, CS01);
+	set_bit(TCCR1B, CS01);
 	clear_bit(TCCR1B, CS02);
 	/* Enable timer overflow */
 	set_bit(TIMSK1, TOIE1);			//
 	/* Enable global interrupts */
 	sei();
+	counter = 0;
+}
+
+void disable_timer1( void) {
+	clear_bit(TCCR1B, CS00);
+	clear_bit(TCCR1B, CS01);
+	clear_bit(TCCR1B, CS02);
+	
 }
 
 ISR(TIMER1_OVF_vect) {
 	//remember to set the timer stack back to 0!
-// 	clear_bit(TCCR1B, CS00);
-// 	clear_bit(TCCR1B, CS01);
-// 	clear_bit(TCCR1B, CS02);
+	toggle_bit(PORTB, PB4);
+	counter++;
+	if (counter == 4) {
+		counter = 0;
+		clear_bit(TCCR1B, CS00);
+		clear_bit(TCCR1B, CS01);
+		clear_bit(TCCR1B, CS02);
+	}
 }

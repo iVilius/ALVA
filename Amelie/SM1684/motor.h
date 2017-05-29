@@ -22,10 +22,9 @@ void motor_heddles_step( void);
 void motor_heddles_up( void);
 void motor_heddles_stop( void);
 void motor_heddles_down( void);
-void motor_rapier_step_cw_ccw( void);
-void motor_rapier_step_ccw_cw( void);
-void motor_reed_step( void);
-void motor_garage_primary_cw( void);
-void motor_garage_primary_ccw( void);
+
+void motor_winding_stop( void);
+void motor_winding_ccw( void);
+void motor_winding_cw( void);
 
 #endif /* MOTOR_H_ */

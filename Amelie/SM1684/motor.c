@@ -8,15 +8,15 @@
 #include "motor.h"
 #include "buttons.h"
 
-int dist_heddles = 0;
-int dist_garage_primary = 0;
-int dist_rapier = 0;
+// int dist_heddles = 0;
+// int dist_garage_primary = 0;
+// int dist_rapier = 0;
 int dist_reed = 0;
 
 // Speed constants. The lower the constant - the faster the rotation
-const int speed_garage = 4;
-const int speed_rapier = 6;
-const int speed_reed = 150;
+// const int speed_garage = 4;
+// const int speed_rapier = 6;
+// const int speed_reed = 150;
 
 void init_motors( void) {
 	/*------Set output--------*/
@@ -29,25 +29,25 @@ void init_motors( void) {
 	set_bit(PORTB, PB6);		// PIN 8
 	
 	/*------Set output--------*/
-	set_bit(DDRD, DDD4);		// DIR  REED
+	set_bit(DDRD, DDD4);		// DIR  WINDING
 	/*-------Set to 0---------*/
 	set_bit(PORTD, PD4);		// PIN 15 EXT 2
 	
 	/*------Set output--------*/
-	set_bit(DDRD, DDD5);		// STEP PRIMARY GARAGE
-	set_bit(DDRE, DDE5);		// DIR PRIMARY GARAGE
+	set_bit(DDRD, DDD5);		// STEP WINDING
+	set_bit(DDRE, DDE5);		// !EN WINDING
 	/*-------Set to 0---------*/
 	set_bit(PORTD, PD5);		// PIN 10
 	set_bit(PORTE, PE5);		// PIN 9
 	
-	/*------Set output--------*/
-	set_bit(DDRB, DDB7);		// STEP RAPIER
-	set_bit(DDRE, DDE7);		// DIR RAPIER
-	/*-------Set to 0---------*/
-	set_bit(PORTB, PB7);		// PIN 5 EXT 3
-	set_bit(PORTE, PE7);		// PIN 9 EXT 3
+// 	/*------Set output--------*/
+// 	set_bit(DDRB, DDB7);		// STEP RAPIER
+// 	set_bit(DDRE, DDE7);		// DIR RAPIER
+// 	/*-------Set to 0---------*/
+// 	set_bit(PORTB, PB7);		// PIN 5 EXT 3
+// 	set_bit(PORTE, PE7);		// PIN 9 EXT 3
 }
-
+/*
 void motor_garage_primary_step( void) {
 	while (1) {
 		set_bit(PORTD, PD5);
@@ -149,6 +149,20 @@ void motor_rapier_step_cw_ccw( void) {
 			break;
 		}
 	}
+}
+*/
+void motor_winding_cw( void) {
+	set_bit(DDRD, DDD4);
+	clear_bit(PORTE, PE5);
+}
+
+void motor_winding_ccw( void) {
+	clear_bit(DDRD, DDD4);
+	clear_bit(PORTE, PE5);
+}
+
+void motor_winding_stop( void) {
+	set_bit(PORTE, PE5);
 }
 
 void motor_heddles_up( void) {

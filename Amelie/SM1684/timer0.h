@@ -10,6 +10,7 @@
 #define TIMER0_H_
 
 #include <avr/interrupt.h>
+#include <avr/io.h>
 #include "definitions.h"
 
 void init_timer0( void);

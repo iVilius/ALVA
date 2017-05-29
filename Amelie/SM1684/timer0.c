@@ -16,7 +16,7 @@
 /* speed 1 == 1 MHz / 256 == 256us.						*/
 /* speed 2 == 1 MHz / 256 * 2 == 512us					*/
 /* etc.													*/
-int speed_heddles = 10;
+int speed_heddles = 1;
 int counter_heddles = 0;
 int speed_winding = 10;
 int counter_winding = 0;
@@ -45,19 +45,24 @@ void init_timer0( void) {
 
 ISR(TIMER0_OVF_vect) {
 	/* Increment counter */
-	counter_heddles;
+	counter_heddles = counter_heddles+1;
+	counter_winding = counter_winding+1;
 	if(counter_heddles == speed_heddles){
 		/* Reset the counter */
 		counter_heddles = 0;
+		
 		/* PWM to motor */
-		//toggle_bit(PORTB, PB4);
 		toggle_bit(PORTB, PB5);
+		
+		//toggle_bit(PORTB, PB4);
 	}
 	if(counter_winding == speed_winding) {
 		/* Reset the counter */
 		counter_winding = 0;
+		
 		/* PWM to motor */
+		toggle_bit(PORTD, PD5);
+		
 		//toggle_bit(PORTB, PB4);
-		toggle_bit(PORTB, PB5);
 	}
 }
